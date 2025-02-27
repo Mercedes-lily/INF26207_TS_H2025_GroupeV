@@ -1,0 +1,1 @@
+#Fonction liés à la reception du client
