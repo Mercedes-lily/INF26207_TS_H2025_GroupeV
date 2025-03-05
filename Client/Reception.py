@@ -1,1 +1,1 @@
-#Fonction liés à la reception du serveur
+# Fonction liés à la reception du serveur
