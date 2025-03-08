@@ -1,0 +1,2 @@
+#Fonction liés aux sockets
+
