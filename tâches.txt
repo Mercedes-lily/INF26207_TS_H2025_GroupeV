@@ -1,0 +1,14 @@
+Client : Demander de faire open avec l'adresse ip
+Client : Ouvrir la connection entre le serveur et le client (poignée de main)  -Socket
+Serveur : Ouvrir la connection entre le serveur et le client (poignée de main)  -Socket
+Client : Recevoir la commande de l'utilisateur et verifier sa validité 
+Client : Transformer la demande à envoyé dans le bon format
+Serveur : Décrypter la commande et l'éxécuté
+    Serveur : Si ls envoyer la liste des fichiers
+    Serveur : Si get envoyer le fichier en morceaux en respectant les conditions établis lors de la poignée de main
+    Serveur : Si bye fermé la connection
+Client : si ls afficher les fichiers recus     
+Client : Si get Vérifier les données transmise
+Client : Si bye fermé la connection 
+
+
