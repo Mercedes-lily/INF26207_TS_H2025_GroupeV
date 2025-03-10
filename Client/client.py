@@ -2,6 +2,7 @@
 #Librairie pour utiliser les sockets
 import socket   
 
+
 #Initialisation du côté client et implémentation du three-Way Handshake
 def SocketStart():
     serveur_port = 2212
