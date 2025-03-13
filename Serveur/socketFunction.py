@@ -1,5 +1,6 @@
 #Fonction liés aux sockets
-import socket 
+import socket
+import Envoie
 
 def threeWay(conf, serv_socket):
     data, client_adresse = serv_socket.recvfrom(1024)  # Receive up to 1024 bytes
@@ -7,8 +8,9 @@ def threeWay(conf, serv_socket):
     print(f"Received data from {client_adresse}: {data_decode}") #decodes the recieved bytes.
     if data_decode == "SYN":
         serv_socket.settimeout(5)
-        message = "SYN-ACK"  
-        serv_socket.sendto(message.encode(), client_adresse)
+        message = "SYN-ACK"
+        if envoie.canSend():
+            serv_socket.sendto(message.encode(), client_adresse)
     data, client_adresse = serv_socket.recvfrom(1024)  # Receive up to 1024 bytes
     print(f"Received data from {client_adresse}: {data.decode()}") #decodes the recieved bytes.
     if data.decode() == "ACK":

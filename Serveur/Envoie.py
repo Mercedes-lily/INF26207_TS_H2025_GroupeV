@@ -40,8 +40,3 @@ def canSend():
 	if random.random() < 0.05:
 		return False
 	return True
-
-
-if __name__ == '__main__':
-	if canSend():
-		sendPacket()
