@@ -22,3 +22,17 @@
 #Code Description\r\n\r\n
 #0 Erreur\r\n\r\n
 
+import random
+
+
+# Fonction qui vérifie si on peut envoyer un paquet
+# Return: True si on peut envoyer, False sinon
+def canSend():
+	if random.random() < 0.05:
+		return False
+	return True
+
+
+if __name__ == '__main__':
+	if canSend():
+		sendPacket()
