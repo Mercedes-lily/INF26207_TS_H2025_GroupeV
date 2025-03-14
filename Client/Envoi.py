@@ -29,3 +29,12 @@
 #Retour Erreur
 #Code Description\r\n\r\n
 #0 Erreur\r\n\r\n
+import random
+
+
+# Fonction qui vérifie si on peut envoyer un paquet
+# Return: True si on peut envoyer, False sinon
+def canSend():
+	if random.random() < 0.75:
+		return False
+	return True
