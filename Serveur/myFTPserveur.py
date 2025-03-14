@@ -9,7 +9,5 @@ def main():
     serv_socket = socketFunction.ServeurStart(conf)
 
 
-    
-
 if __name__ == "__main__":
     main()
