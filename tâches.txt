@@ -10,5 +10,3 @@ Serveur : Décrypter la commande et l'éxécuté
 Client : si ls afficher les fichiers recus     
 Client : Si get Vérifier les données transmise
 Client : Si bye fermé la connection 
-
-
