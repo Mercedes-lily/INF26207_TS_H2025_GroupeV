@@ -3,20 +3,20 @@
 #Format du Header par commande
 
 
-#TypeRequete\r\nVariable 1\r\nVariable 2\r\n ... \r\nVariable n\r\n\r\n
+#TypeRequete\r\nVariable 1\r\nVariable 2\r\n ... \r\nVariable n\r
 
 #Envoie get
-#Commande\r\nFichier demandé\r\nTaille du Header\r\n\r\n
-#Get\r\nsocket.py\r\nTailleHeader:37\r\n\r\n
+#Commande\r\nFichier demandé\r\nTaille du Header\r\n
+#Get\r\nsocket.py\r\n
 
 #Retour Accusées de reception
-#Code Description\r\n\r\n
-#4 Reception\r\n\r\n
+#Code Description\r\n
+#4 Reception\r\n
 
 #Envoi ls et bye
 #Commande\r\n\r\n
-#ls\r\n\r\n
-#bye\r\n\r\n
+#ls\r\n
+#bye\r\n
 
 #Envoie open (Syn)
 #Commande\r\nadresse ip\r\nTaille du Header\r\nTaille proposé\r\nNombre de morceaux maximales avant l'accusé de réception proposé\r\n\r\n
