@@ -4,7 +4,6 @@ import socket
 import Envoie
 
 def negociation(message, conf, SYNACK):   # regarder le SYN
-    
     splitmessage = message.split("\r\n")
     if(splitmessage[0] != SYNACK):
         print("pas le bon syn ou ack")
@@ -15,9 +14,6 @@ def negociation(message, conf, SYNACK):   # regarder le SYN
         if len(splitm) == 1:
             continue
         dataRecu[splitm[0]] =  splitm[1]
-    print(message)
-    print(len(message))
-    print(dataRecu["TailleHeader"])
     if(int(dataRecu["TailleHeader"]) != len(message)):
         print("difference de taille")
         return False
@@ -26,7 +22,7 @@ def negociation(message, conf, SYNACK):   # regarder le SYN
     if(conf["DataConfirmation"] > dataRecu["NombreMorceaux"]):
         conf["DataConfirmation"] = dataRecu["NombreMorceaux"]
     return True
-    
+
 def CreateThreeWayHeader(message, conf) :
     message += "Taille:"+ conf["DataSize"].strip() + "\r\n"
     message += "NombreMorceaux:" + conf["DataConfirmation"].strip() + "\r\n"
@@ -34,9 +30,6 @@ def CreateThreeWayHeader(message, conf) :
     tailleheader += len(str(tailleheader))
     message += "TailleHeader:" + str(tailleheader) + "\r\n"
     message += "\r\n"
-    print(message)
-    print(len(message))
-    print(tailleheader)
     return message
 
 #reste le temps dattente et aussi le retourner si le ack nest pas satisfait
@@ -44,7 +37,6 @@ def threeWay(conf, serv_socket):
     data, client_adresse = serv_socket.recvfrom(int(conf["DataSize"]))  # Recoit jusqua DataSize bytes
     message = data.decode()
     print(f"Received data from {client_adresse}: {message}")
-    print(negociation(message, conf, "SYN"))
     if negociation(message, conf, "SYN") == True:
         print("negociation")
         serv_socket.settimeout(5)
@@ -55,7 +47,7 @@ def threeWay(conf, serv_socket):
     print(f"Received data from {client_adresse}: {data.decode()}")
     if negociation(message, conf, "ACK") == True:
         print("3 way : reussi")
-    
+
 # try:
 #         serv_socket.settimeout(0.1)
 #         tried = 0

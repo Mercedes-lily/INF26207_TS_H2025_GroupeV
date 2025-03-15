@@ -63,9 +63,6 @@ def CreateThreeWayHeader(message, conf) :
     tailleheader += len(str(tailleheader)) + 4
     message += "TailleHeader:" + str(tailleheader) + "\r\n"
     message += "\r\n"
-    print(message)
-    print(len(message))
-    print(tailleheader)
     return message
 
 def threeWay(conf, client_socket, serv_adresse):
@@ -77,8 +74,6 @@ def threeWay(conf, client_socket, serv_adresse):
     data, serv_adresse = client_socket.recvfrom(int(conf["DataSize"]))  #Recoit jusqua datasize byte
     message = data.decode()
     print(f"Received data from {serv_adresse}: {message}") 
-    print("negocaition dans le client  ")
-    print(negociation(message, conf))
     if negociation(message, conf) == True:
         message = CreateThreeWayHeader("ACK\r\n", conf)
         client_socket.sendto(message.encode(), serv_adresse)

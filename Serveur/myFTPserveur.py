@@ -8,6 +8,5 @@ def main():
     conf = Utilitaires.lectureConfigurationFile()
     serv_socket = socketFunction.ServeurStart(conf)
 
-
 if __name__ == "__main__":
     main()
