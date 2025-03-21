@@ -13,10 +13,10 @@ Client : Si bye fermé la connection (C'est fait)
 
 Mettre les élément dans une boucle d'écoute 
 Faire le get 
-- envoyer la requete get\r\ntext.txt au serveur
-- serveur : verifier si le fichier existe
-    - non : envoie  au client que le fichier est invalide
-    - oui : envoie le fichier en morceau et attendre une confirmation apres un certains nombre de morceaux 
+- Envoyer la requete get\r\ntext.txt au serveur
+- Serveur : verifier si le fichier existe
+    - Non : envoie  au client que le fichier est invalide
+    - Oui : envoie le fichier en morceau et attendre une confirmation apres un certains nombre de morceaux 
         si apres 3 secondes il n'a pas recu de confirmation, il va retourner le dernier groupe de morceaux
         il envoit qu'il a terminé
 -Client : il envoie des confirmation lorsqu'il a recu un certains nombre de morceaux 
