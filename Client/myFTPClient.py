@@ -39,7 +39,7 @@ def main():
     conf = Utilitaires.lectureConfigurationFile()
     client_socket = socketFunction.SocketStart(conf, isconnect)
     lireEntree(client_socket)
-    # socketFunction.loop_client(isconnect)
+    socketFunction.loop_client(isconnect)
 
 if __name__ == "__main__":
     main()
