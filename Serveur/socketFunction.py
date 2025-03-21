@@ -2,6 +2,37 @@
 
 import socket
 import EnvoiServeur
+import os
+
+# Répertoire où les fichiers sont stockés
+FILES_DIRECTORY = "Serveur/server_files"
+# Fonction pour lister les fichiers disponibles
+
+#Fichier contenant les fonctions liées au fonctionnalité du serveur
+
+# ls : Le client demande la liste des fichiers disponibles sur le serveur.
+
+ #Le serveur doit être capable de lister les fichiers disponibles dans un répertoire spécifique et de les envoyer au client.
+def list_files():
+     if not os.path.exists(FILES_DIRECTORY):
+         os.makedirs(FILES_DIRECTORY)  # Créer le répertoire s'il n'existe pas
+     files = os.listdir(FILES_DIRECTORY)
+     return files
+
+# Fonction pour gérer la commande "ls"
+def handle_ls_command(client_address, serv_socket):
+    files = list_files()
+    if not files:
+        response = "Aucun fichier disponible."
+    else:
+        response = "Fichiers disponibles:\n" + "\n".join(files)
+    serv_socket.sendto(response.encode(), client_address)
+    print(f"Liste des fichiers envoyée au client {client_address}" + response)
+    # Envoyer la réponse au client
+
+def handle_bye_command(client_address, serv_socket):
+    response = "bye\r\n"
+    serv_socket.sendto(response.encode(), client_address)
 
 def negociation(message, conf, SYNACK):   # regarder le SYN
 	splitmessage = message.split("\r\n")
@@ -56,15 +87,19 @@ def threeWay(conf, serv_socket):
 					else:
 						print("Erreur envoie")
 				elif negociation(message, conf, "ACK") == True:
-					print("3 way : reussi")
-					# return
+					data, client_adresse = serv_socket.recvfrom(int(conf["DataSize"]))  # Recoit jusqua DataSize bytes
+					print(f"Received data from {client_adresse}: {data.decode()}")
+					if(data.decode() == "ls\r\n"):
+						handle_ls_command(client_adresse, serv_socket)
+					if(data.decode() == "bye\r\n"):
+						handle_bye_command(client_adresse, serv_socket)
 			except socket.timeout:
 				pass  # Ignorer les délais d'attente et continuer
 	except KeyboardInterrupt:
 		print("3 way : Echec (Ctrl+C)")
 
 #Initialisation du socket UDP du côté serveur et implémentation du three-Way Handshake
-#Lecture necessaire dna sun fichier de configuration
+#Lecture necessaire dans un fichier de configuration
 def ServeurStart(conf):
 	port = 2212
 	serv_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

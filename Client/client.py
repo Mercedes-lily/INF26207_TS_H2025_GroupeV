@@ -18,9 +18,11 @@ def SocketStart():
 		message = "ACK"
 		if EnvoiClient.canSend():
 			client_socket.sendto(message.encode(), serv_adresse)
+	data, serv_adresse = client_socket.recvfrom(1024)
 
 def main():
 	SocketStart()
+
 	
 
 if __name__ == "__main__":

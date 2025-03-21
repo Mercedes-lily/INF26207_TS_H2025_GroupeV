@@ -16,20 +16,15 @@
 #2 Fermeture OK\r\n\r\n
 
 #Retour ls
-#Code Description\r\nTaille du Header\r\nTaille des données envoyées\r\nDonnées\r\n\r\n
-#1 OK\r\nTailleHeader:37\r\nTaille:25000\r\nDonnées:socket.py\nModule1.pdf\r\n\r\n
-#Code Description\r\nTaille du Header\r\nTaille des données envoyées\r\nDonnées\r\n\r\n
-#1 OK\r\nTailleHeader:37\r\nTaille:25000\r\nDonnées:socket.py\nModule1.pdf\r\n\r\n
+#Code Description\r\nTaille du Header\r\nTaille des données envoyées\r\nDonnées\r\n
+#1 OK\r\nTailleHeader:37\r\nTaille:25000\r\nDonnées:socket.py\nModule1.pdf\r\n
+#Code Description\r\nTaille du Header\r\nTaille des données envoyées\r\nDonnées\r\n
+#1 OK\r\nTailleHeader:37\r\nTaille:25000\r\nDonnées:socket.py\nModule1.pdf\r\n
 
-#Retour open (Ack-Syn)
-#Code Description\r\nTaille du Header\r\nTaille Négociée\r\nNombre de morceaux maximales avant l'accusé de réception\r\n\r\n
-#5 Ack-Syn\r\nTailleHeader:37\r\nTaille:30000\r\nNombreMorceaux:3\r\n\r\n
-#Code Description\r\nTaille du Header\r\nTaille Négociée\r\nNombre de morceaux maximales avant l'accusé de réception\r\n\r\n
-#5 Ack-Syn\r\nTailleHeader:37\r\nTaille:30000\r\nNombreMorceaux:3\r\n\r\n
 
 #Retour Erreur
-#Code Description\r\n\r\n
-#0 Erreur\r\n\r\n
+#Code Description\r\n
+#Erreur\r\n
 
 import random
 

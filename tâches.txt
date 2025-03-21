@@ -1,12 +1,24 @@
-Client : Demander de faire open avec l'adresse ip
-Client : Ouvrir la connection entre le serveur et le client (poignée de main)  -Socket
-Serveur : Ouvrir la connection entre le serveur et le client (poignée de main)  -Socket
-Client : Recevoir la commande de l'utilisateur et verifier sa validité 
-Client : Transformer la demande à envoyé dans le bon format
+Client : Demander de faire open avec l'adresse ip (C'est fait)
+Client : Ouvrir la connection entre le serveur et le client (poignée de main)  -Socket  (C'est fait)
+Serveur : Ouvrir la connection entre le serveur et le client (poignée de main)  -Socket  (C'est fait)
+Client : Recevoir la commande de l'utilisateur et verifier sa validité (C'est fait)
+Client : Transformer la demande à envoyé dans le bon format  (C'est fait)
 Serveur : Décrypter la commande et l'éxécuté
-    Serveur : Si ls envoyer la liste des fichiers
+    Serveur : Si ls envoyer la liste des fichiers    (C'est fait)
     Serveur : Si get envoyer le fichier en morceaux en respectant les conditions établis lors de la poignée de main
-    Serveur : Si bye fermé la connection
-Client : si ls afficher les fichiers recus     
-Client : Si get Vérifier les données transmise
-Client : Si bye fermé la connection 
+    Serveur : Si bye fermé la connection (Mettre dans la boucle)
+Client : si ls afficher les fichiers recus   (Reste à débugger le print)
+Client : Si get Vérifier les données transmise 
+Client : Si bye fermé la connection (C'est fait)
+
+Mettre les élément dans une boucle d'écoute 
+Faire le get 
+- envoyer la requete get\r\ntext.txt au serveur
+- serveur : verifier si le fichier existe
+    - non : envoie  au client que le fichier est invalide
+    - oui : envoie le fichier en morceau et attendre une confirmation apres un certains nombre de morceaux 
+        si apres 3 secondes il n'a pas recu de confirmation, il va retourner le dernier groupe de morceaux
+        il envoit qu'il a terminé
+-Client : il envoie des confirmation lorsqu'il a recu un certains nombre de morceaux 
+        réassemble les morceaux dans le bon ordre
+        il le met dans le dossier telechargements
