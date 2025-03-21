@@ -41,7 +41,7 @@ def threeWay(conf, serv_socket):
 		while True:
 			try:
 				data, client_adresse = serv_socket.recvfrom(int(conf["DataSize"]))  # Recoit jusqua DataSize bytes
-				if not data:
+				if not data or tried > 4:
 					break  #TODO Connexion fermée par l'hôte distant ############UTILE? 
 				message = data.decode()
 				print(f"Received data from {client_adresse}: {message}")
@@ -50,8 +50,8 @@ def threeWay(conf, serv_socket):
 					print("negociation")
 					serv_socket.settimeout(3)
 					message = CreateThreeWayHeader("SYN-ACK\r\n", conf)
+					tried += 1
 					if EnvoiServeur.canSend():
-						tried += 1
 						serv_socket.sendto(message.encode(), client_adresse)
 					else:
 						print("Erreur envoie")

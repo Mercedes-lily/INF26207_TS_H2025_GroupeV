@@ -68,8 +68,8 @@ def CreateThreeWayHeader(message, conf) :
 
 def threeWay(conf, client_socket, serv_adresse):
 	message = CreateThreeWayHeader("SYN\r\n", conf)
-	# if EnvoiClient.canSend():
-	client_socket.sendto(message.encode(), serv_adresse)
+	if EnvoiClient.canSend():
+		client_socket.sendto(message.encode(), serv_adresse)
 	client_socket.settimeout(3)
 	data, serv_adresse = client_socket.recvfrom(int(conf["DataSize"]))  #Recoit jusqua datasize byte
 	message = data.decode()
