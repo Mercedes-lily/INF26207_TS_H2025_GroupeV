@@ -19,6 +19,30 @@ def list_files():
      files = os.listdir(FILES_DIRECTORY)
      return files
 
+# TODO :change to listen to client when connection is established
+def loop_serveur(isconnect):
+	while(isconnect == True):
+		entreeClient = input(":> ").strip()
+		entrerClientSplit = entreeClient.split(" ")
+		if(entrerClientSplit[0] == "open"):
+			print("Veuillez fermer la connection avec le serveur en cours avec la commande bye")
+		if(entrerClientSplit[0] == "bye"and len(entrerClientSplit[0]) == 1):
+			isconnect = False
+			commandeBye()
+		elif(entrerClientSplit[0] == "bye"and len(entrerClientSplit[0]) != 1):
+			print("Veuillez entrer la commande bye uniquement")
+		if(entrerClientSplit[0] == "get"and len(entrerClientSplit[0]) == 2):
+			commandeGet()
+		elif(entrerClientSplit[0] == "get"and len(entrerClientSplit[0]) != 2):
+			print("Veuillez entrer la commande open et une unique adresse ip")
+		if(entrerClientSplit[0] == "ls" and len(entrerClientSplit[0]) == 1):
+			commandeLs()
+		elif(entrerClientSplit[0] == "ls"and len(entrerClientSplit[0]) != 1):
+			print("Veuillez entrer la commande ls uniquement")
+		else:
+			print("Entrer une commande valide parmis get pour obtenir un fichier, bye pour fermer la connexion avec le serveur ou ls pour obtenir la liste des fichier disponible au téléchargement")
+
+
 # Fonction pour gérer la commande "ls"
 def handle_ls_command(client_address, serv_socket):
     files = list_files()
