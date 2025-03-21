@@ -66,7 +66,7 @@ def CreateThreeWayHeader(message, conf) :
 	message += "\r\n"
 	return message
 
-def threeWay(conf, client_socket, serv_adresse):
+def ThreeWay(conf, client_socket, serv_adresse):
 	message = CreateThreeWayHeader("SYN\r\n", conf)
 	if EnvoiClient.canSend():
 		client_socket.sendto(message.encode(), serv_adresse)
@@ -84,10 +84,10 @@ def threeWay(conf, client_socket, serv_adresse):
 	return False
 
 #Initialisation du côté client et implémentation du three-Way Handshake
-def SocketStart(conf, isconnect):
-	serv_adresse = ("127.0.0.1", 2212)  #changer pour celui que on va recevoir de lentree du client
-	conf["IP"] = "127.0.0.1"
+def SocketStart(conf, isconnect, addr):
+	serv_adresse = (addr, 2212)  #changer pour celui que on va recevoir de lentree du client
+	conf["IP"] = addr
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	while (isconnect == False):
-		isconnect = threeWay(conf, client_socket, serv_adresse)
+		isconnect = ThreeWay(conf, client_socket, serv_adresse)
 	return client_socket

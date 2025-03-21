@@ -34,10 +34,25 @@ def lireEntree(client_socket):
     else:
         print("Pas la bonne commande")
 
+def OuvertureClient():
+    print("Bienvenue !")
+    while True:
+        str = input("Veuillez entrer open et l'adresse IPv4 du serveur auquel vous voulez vous connecter :>")
+        strSplit = str.split()
+        if(len(strSplit) == 2 and  strSplit[0] == "open"):
+            return strSplit[1]
+        elif(len(strSplit) > 2 and  strSplit[0] == "open"):
+            print("Entrée invalide : Une seule adresse IPv4 est permise")
+        elif(len(strSplit) < 2 and  strSplit[0] == "open"):
+            print("Entrée invalide : Une adresse doit être entré")
+        else:
+            print("Entrée invalide : Vous devez d'abord vous connecter avec la commande open")
+
 def main():
+    addr = OuvertureClient()
     isconnect = False
     conf = Utilitaires.lectureConfigurationFile()
-    client_socket = socketFunction.SocketStart(conf, isconnect)
+    client_socket = socketFunction.SocketStart(conf, isconnect, addr)
     lireEntree(client_socket)
     socketFunction.loop_client(isconnect)
 
