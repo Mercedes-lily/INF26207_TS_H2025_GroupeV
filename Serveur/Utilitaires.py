@@ -1,5 +1,6 @@
 #Fonctions utiles en générales
 
+#Fonctions qui permet de vérifier si toutes les informations sont dans le fichier de configuration
 def Validite(conf):
 	if("Port" not in conf):
 		conf["Port"] = "2212"
@@ -14,6 +15,7 @@ def Validite(conf):
 	if("Encode" not in conf):
 		conf["Encode"] = "UTF-8"
 
+#Fonctions qui permet de lire le fichier de configuration
 def lectureConfigurationFile():
 	dictionnaireConfiguration = {}
 	with open("Serveur/Serveur.conf", 'r') as fichier:
