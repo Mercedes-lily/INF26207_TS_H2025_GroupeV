@@ -2,10 +2,6 @@
 import socket
 import EnvoiClient
 
-#Envoie open (Syn)
-#Commande\r\nadresse ip\r\nTaille du Header\r\nTaille proposé\r\nNombre de morceaux maximales avant l'accusé de réception proposé\r\n\r\n
-#Syn\r\n127.0.0.0\r\nTailleHeader:37\r\nTaille:30000\r\nNombreMorceaux:3\r\n\r\n
-
 def commandeBye(client_socket, conf):    ##comment pour la boucle de renvoie
 	str = "bye\r\n"
 	if EnvoiClient.canSend():
@@ -14,6 +10,24 @@ def commandeBye(client_socket, conf):    ##comment pour la boucle de renvoie
 		message = data.decode()
 		if(message == "bye\r\n"):
 			print("Déconnection effectué")
+
+def CreateGetHeader(fichier):
+	message += "get" + fichier +"\r\n"
+	tailleheader = len(message) + len("TailleHeader:")
+	tailleheader += len(str(tailleheader)) + 4
+	message += "TailleHeader:" + str(tailleheader) + "\r\n"
+	message += "\r\n"
+	return message
+
+def CreateConfirmationHeader(last):
+	message += "Confirmation:" + "\r\n"
+	message += "DernierMorceaux:" + last + "\r\n"
+	tailleheader = len(message) + len("TailleHeader:")
+	tailleheader += len(str(tailleheader)) + 4
+	message += "TailleHeader:" + str(tailleheader) + "\r\n"
+	message += "\r\n"
+	return message
+
 
 def commandeGet(client_socket, conf, fichier):
 	str = "get\r\n"
@@ -125,3 +139,5 @@ def SocketStart(conf, isconnect, addr):
 	while (isconnect == False):
 		isconnect = ThreeWay(conf, client_socket, serv_adresse)
 	return client_socket
+
+

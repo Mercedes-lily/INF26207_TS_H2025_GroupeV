@@ -30,6 +30,19 @@ def handle_ls_command(client_address, serv_socket):
     print(f"Liste des fichiers envoyée au client {client_address}" + response)
     # Envoyer la réponse au client
 
+
+def CreateGetHeaderServeur(conf, fichier, islast, donnee, numero):
+	message = islast + "\r\n"
+	message += "Fichier:" + fichier + "\r\n"
+	message += "NumeroMorceaux:" + numero + "\r\n"
+	message += "Checksum:"+ len(donnee) + "\r\n"
+	tailleheader = len(message) + len("TailleHeader:") + len("Donnees:") + len(donnee) + len ("\r\n") 
+	tailleheader += len(str(tailleheader)) + 4
+	message += "TailleHeader:" + str(tailleheader) + "\r\n"
+	message +="Donnees:" + donnee + "\r\n"
+	message += "\r\n"
+	return message
+
 def handle_bye_command(client_address, serv_socket):
     response = "bye\r\n"
     serv_socket.sendto(response.encode(), client_address)
