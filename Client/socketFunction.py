@@ -11,6 +11,11 @@ def commandeBye(client_socket, conf):    ##comment pour la boucle de renvoie
 		if(message == "bye\r\n"):
 			print("Déconnection effectué")
 
+def VerificationChecksum(checksum, donnee):
+	if(len(donnee) == checksum):
+		return True
+	return False
+
 def CreateGetHeader(fichier):
 	message += "get" + fichier +"\r\n"
 	tailleheader = len(message) + len("TailleHeader:")
@@ -20,14 +25,13 @@ def CreateGetHeader(fichier):
 	return message
 
 def CreateConfirmationHeader(last):
-	message += "Confirmation:" + "\r\n"
+	message += "Confirmation" + "\r\n"
 	message += "DernierMorceaux:" + last + "\r\n"
 	tailleheader = len(message) + len("TailleHeader:")
 	tailleheader += len(str(tailleheader)) + 4
 	message += "TailleHeader:" + str(tailleheader) + "\r\n"
 	message += "\r\n"
 	return message
-
 
 def commandeGet(client_socket, conf, fichier):
 	str = "get\r\n"
