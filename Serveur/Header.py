@@ -26,12 +26,14 @@ def CreateByeHeaderServeur():
 	message = "bye\r\n"
 	while(len(message) != 100):
 		message += " "
+	return message
 
 #Fonction pour le header de la fonction ls
 def CreateLsHeaderServeur(files):
-	message = "ls\r\n"
+	message = ""
 	if not files:
 		message += "Aucun fichier disponible."
 	else:
-		message += files + "\r\n"
+		for file in files:
+			message += file + "\r\n"
 	return message
