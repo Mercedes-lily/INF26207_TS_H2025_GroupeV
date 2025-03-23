@@ -17,6 +17,7 @@ def negociation(message, conf, SYNACK):
 		dataRecu[splitm[0]] =  splitm[1]
 	if(int(dataRecu["TailleHeader"]) != len(message)):
 		print("difference de taille")
+		print("    ")
 		return False
 	if(conf["DataSize"] != dataRecu["Taille"]):
 		conf["DataSize"] = dataRecu["Taille"]

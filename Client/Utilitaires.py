@@ -25,3 +25,8 @@ def lectureConfigurationFile():
 		Validite(dictionnaireConfiguration)
 		print(dictionnaireConfiguration)
 	return dictionnaireConfiguration
+
+def VerificationChecksum(checksum, donnee):
+	if(len(donnee) == checksum):
+		return True
+	return False

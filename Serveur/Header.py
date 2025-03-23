@@ -11,8 +11,8 @@ def CreateThreeWayHeader(message, conf) :
 
 #Fonction pour le header de la fonction get
 def CreateGetHeaderServeur(fichier, islast, donnee, numero):
-	message = islast + "\r\n"
 	message += "Fichier:" + fichier + "\r\n"
+	message += "Dernier:" + islast + "\r\n"
 	message += "NumeroMorceaux:" + numero + "\r\n"
 	message += "Checksum:"+ len(donnee) + "\r\n"
 	message += "TailleHeader:100\r\n"
