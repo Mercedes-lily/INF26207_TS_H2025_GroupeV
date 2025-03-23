@@ -4,29 +4,34 @@
 def CreateThreeWayHeader(message, conf) :
 	message += "Taille:"+ conf["DataSize"].strip() + "\r\n"
 	message += "NombreMorceaux:" + conf["DataConfirmation"].strip() + "\r\n"
-	tailleheader = len(message) + len("TailleHeader:") + 4
-	tailleheader += len(str(tailleheader))
-	message += "TailleHeader:" + str(tailleheader) + "\r\n"
-	message += "\r\n"
+	message += "TailleHeader:100\r\n"
+	while(len(message) != 100):
+		message += " "
 	return message
 
 #Fonction pour le header de la fonction get
-def CreateGetHeaderServeur(conf, fichier, islast, donnee, numero):
+def CreateGetHeaderServeur(fichier, islast, donnee, numero):
 	message = islast + "\r\n"
 	message += "Fichier:" + fichier + "\r\n"
 	message += "NumeroMorceaux:" + numero + "\r\n"
 	message += "Checksum:"+ len(donnee) + "\r\n"
-	tailleheader = len(message) + len("TailleHeader:") + len("Donnees:") + len(donnee) + len ("\r\n") 
-	tailleheader += len(str(tailleheader)) + 4
-	message += "TailleHeader:" + str(tailleheader) + "\r\n"
-	message +="Donnees:" + donnee + "\r\n"
-	message += "\r\n"
+	message += "TailleHeader:100\r\n"
+	while(len(message) != 100):
+		message += " "
+	message + donnee
 	return message
 
-#Fonction pour le header de la fonction get
-def CreateByeHeaderServeur(conf, fichier, islast, donnee, numero):
-	return 0
-	#Fonction pour le header de la fonction get
+#Fonction pour le header de la fonction by
+def CreateByeHeaderServeur():
+	message = "bye\r\n"
+	while(len(message) != 100):
+		message += " "
 
-def CreateLsHeaderServeur(conf, fichier, islast, donnee, numero):
-		return 0
+#Fonction pour le header de la fonction ls
+def CreateLsHeaderServeur(files):
+	message = "ls\r\n"
+	if not files:
+		message += "Aucun fichier disponible."
+	else:
+		message += files + "\r\n"
+	return message

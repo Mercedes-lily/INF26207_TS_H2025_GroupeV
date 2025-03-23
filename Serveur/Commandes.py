@@ -1,5 +1,6 @@
 #Fichier contenant les fonctions liées au fonctionnalité du serveur
 import os
+import Header
 
 #Endroit où sont stocké les fichiers à télécharger
 FILES_DIRECTORY = "Serveur/server_files"
@@ -14,16 +15,13 @@ def list_files():
 # Fonction pour gérer la commande "ls"
 def handle_ls_command(client_address, serv_socket):
     files = list_files()
-    if not files:
-        response = "Aucun fichier disponible."
-    else:
-        response = "Fichiers disponibles:\n" + "\n".join(files)
+    response = Header.CreateLsHeaderServeur(files)
     serv_socket.sendto(response.encode(), client_address)
     print(f"Liste des fichiers envoyée au client {client_address}" + response)
 
 # Fonction pour gérer la commande "bye" - Déconnexion
 def handle_bye_command(client_address, serv_socket):
-    response = "bye\r\n"
+    response = Header.CreateByeHeaderServeur()
     serv_socket.sendto(response.encode(), client_address)
 
 # Fonction pour gérer la commande "get" - Envoie de fichier
