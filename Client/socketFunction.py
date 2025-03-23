@@ -2,40 +2,92 @@
 import socket
 import EnvoiClient
 
-#Envoie open (Syn)
-#Commande\r\nadresse ip\r\nTaille du Header\r\nTaille proposé\r\nNombre de morceaux maximales avant l'accusé de réception proposé\r\n\r\n
-#Syn\r\n127.0.0.0\r\nTailleHeader:37\r\nTaille:30000\r\nNombreMorceaux:3\r\n\r\n
+def commandeBye(client_socket, conf):    ##comment pour la boucle de renvoie
+	str = "bye\r\n"
+	if EnvoiClient.canSend():
+		client_socket.sendto(str.encode(), conf["AdresseServeur"])
+		data, serv_adresse = client_socket.recvfrom(int(conf["DataSize"]))  #Recoit jusqua datasize byte
+		message = data.decode()
+		if(message == "bye\r\n"):
+			print("Déconnection effectué")
 
-def commandeBye():
-	return 0
+def VerificationChecksum(checksum, donnee):
+	if(len(donnee) == checksum):
+		return True
+	return False
 
-def commandeGet():
-	return 0
+def CreateGetHeader(fichier):
+	message += "get" + fichier +"\r\n"
+	tailleheader = len(message) + len("TailleHeader:")
+	tailleheader += len(str(tailleheader)) + 4
+	message += "TailleHeader:" + str(tailleheader) + "\r\n"
+	message += "\r\n"
+	return message
 
-def commandeLs():
-	return 0
+def CreateConfirmationHeader(last):
+	message += "Confirmation" + "\r\n"
+	message += "DernierMorceaux:" + last + "\r\n"
+	tailleheader = len(message) + len("TailleHeader:")
+	tailleheader += len(str(tailleheader)) + 4
+	message += "TailleHeader:" + str(tailleheader) + "\r\n"
+	message += "\r\n"
+	return message
 
-def loop_client(isconnect):
+def commandeGet(client_socket, conf, fichier):
+	str = "get\r\n"
+	str += fichier + "\r\n"
+	if EnvoiClient.canSend():
+		client_socket.sendto(str.encode(), conf["AdresseServeur"])
+		##Fichier dans telechargement 
+		##reception du message
+		##decodage
+		##verification du fichier
+		##verification de la somme
+		##assemblage et affichage de la barre de telechargement 
+		##reception de la fin
+		##envoie des confirmation
+		##Indiquer que le telechargement est complet
+
+
+def commandeLs(client_socket, conf):
+	str = "ls\r\n"
+	if EnvoiClient.canSend():
+		client_socket.sendto(str.encode(), conf["AdresseServeur"])
+		data, serv_adresse = client_socket.recvfrom(int(conf["DataSize"]))  #Recoit jusqua datasize byte
+		message = data.decode()
+		print(message) 
+
+def AideCommandes():
+	print("Veuillez entrer une commande parmi :")
+	print("		ls : Pour connaitre les fichier téléchargables")
+	print("		get NomDuFichier: Pour télécharger le fichier demandé")
+	print("		bye : pour vous reconnecter")
+    
+
+def loop_client(client_socket, conf):
+	isconnect = True
+	AideCommandes()
 	while(isconnect == True):
-		entreeClient = input(":> ").strip()
-		entrerClientSplit = entreeClient.split(" ")
-		if(entrerClientSplit[0] == "open"):
-			print("Veuillez fermer la connection avec le serveur en cours avec la commande bye")
-		if(entrerClientSplit[0] == "bye"and len(entrerClientSplit[0]) == 1):
-			isconnect = False
-			commandeBye()
-		elif(entrerClientSplit[0] == "bye"and len(entrerClientSplit[0]) != 1):
-			print("Veuillez entrer la commande bye uniquement")
-		if(entrerClientSplit[0] == "get"and len(entrerClientSplit[0]) == 2):
-			commandeGet()
-		elif(entrerClientSplit[0] == "get"and len(entrerClientSplit[0]) != 2):
-			print("Veuillez entrer la commande open et une unique adresse ip")
-		if(entrerClientSplit[0] == "ls" and len(entrerClientSplit[0]) == 1):
-			commandeLs()
-		elif(entrerClientSplit[0] == "ls"and len(entrerClientSplit[0]) != 1):
+		str = input(":>")
+		strSplit = str.split()
+		if(str.strip() == "ls"):
+			commandeLs(client_socket, conf)
+		elif(strSplit[0].strip() == "ls"and len(strSplit) != 1):
 			print("Veuillez entrer la commande ls uniquement")
+		elif (str.strip() == "bye"):
+			commandeBye(client_socket, conf)
+			isconnect = False
+		elif(strSplit[0].strip() == "bye"and len(strSplit) != 1):
+			print("Veuillez entrer la commande bye uniquement")
+		elif(strSplit[0].strip() == "get"and len(strSplit) == 2):
+			commandeGet(client_socket, conf, strSplit[1])
+		elif(strSplit[0].strip() == "get"and len(strSplit) != 2):
+			print("La commande get doit  être écrite comme suit : get NomDuFichier.Extention")
+		elif(strSplit[0].strip() == "open"):
+			print("Veuillez fermer la connection avec le serveur en cours avec la commande bye avant de vous connecter à un nouveau serveur")
 		else:
-			print("Entrer une commande valide parmis get pour obtenir un fichier, bye pour fermer la connexion avec le serveur ou ls pour obtenir la liste des fichier disponible au téléchargement")
+			AideCommandes()
+
 
 def negociation(message, conf):
 	splitmessage = message.split("\r\n")
@@ -66,7 +118,7 @@ def CreateThreeWayHeader(message, conf) :
 	message += "\r\n"
 	return message
 
-def ThreeWay(conf, client_socket, serv_adresse):
+def ThreeWay(conf, client_socket, serv_adresse):     ##Prob. ici
 	message = CreateThreeWayHeader("SYN\r\n", conf)
 	if EnvoiClient.canSend():
 		client_socket.sendto(message.encode(), serv_adresse)
@@ -86,8 +138,10 @@ def ThreeWay(conf, client_socket, serv_adresse):
 #Initialisation du côté client et implémentation du three-Way Handshake
 def SocketStart(conf, isconnect, addr):
 	serv_adresse = (addr, 2212)  #changer pour celui que on va recevoir de lentree du client
-	conf["IP"] = addr
+	conf["AdresseServeur"] = serv_adresse
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	while (isconnect == False):
 		isconnect = ThreeWay(conf, client_socket, serv_adresse)
 	return client_socket
+
+

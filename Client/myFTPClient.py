@@ -53,8 +53,7 @@ def main():
     isconnect = False
     conf = Utilitaires.lectureConfigurationFile()
     client_socket = socketFunction.SocketStart(conf, isconnect, addr)
-    lireEntree(client_socket)
-    socketFunction.loop_client(isconnect)
+    socketFunction.loop_client(client_socket, conf)
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,6 @@
 #Fonctions utiles en générales
 
+#Fonctions qui permet de vérifier si toutes les informations sont dans le fichier de configuration
 def Validite(conf):
 	if("Timeout" not in conf):
 		conf["Timeout"] = "3"
@@ -8,6 +9,7 @@ def Validite(conf):
 	if("DataConfirmation" not in conf):
 		conf["DataConfirmation"] = "5"
 
+#Fonctions qui permet de lire le fichier de configuration
 def lectureConfigurationFile():
 	dictionnaireConfiguration = {}
 	with open("Client/Client.conf", 'r') as fichier:
