@@ -17,6 +17,7 @@ def negociation(message, conf, SYNACK):
 		dataRecu[splitm[0]] =  splitm[1]
 	if(int(dataRecu["TailleHeader"]) != len(message)):
 		print("difference de taille")
+		print("    ")
 		return False
 	if(conf["DataSize"] != dataRecu["Taille"]):
 		conf["DataSize"] = dataRecu["Taille"]
@@ -50,9 +51,9 @@ def threeWay(conf, serv_socket):
 				elif negociation(message, conf, "ACK") == True:
 					data, client_adresse = serv_socket.recvfrom(int(conf["DataSize"]))  # Recoit jusqua DataSize bytes
 					print(f"Received data from {client_adresse}: {data.decode()}")
-					if(data.decode() == "ls\r\n"):
+					if(data.decode().strip(" \r\n") == "ls"):
 						Commandes.handle_ls_command(client_adresse, serv_socket)
-					if(data.decode() == "bye\r\n"):
+					if(data.decode().strip(" \r\n") == "bye"):
 						Commandes.handle_bye_command(client_adresse, serv_socket)
 			except socket.timeout:
 				pass  # Ignorer les délais d'attente et continuer

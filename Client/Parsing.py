@@ -1,1 +1,0 @@
-#Fonction de découpage de l'information afin de l'utilisé

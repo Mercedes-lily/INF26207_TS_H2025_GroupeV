@@ -31,3 +31,4 @@ def lectureConfigurationFile():
 		Validite(dictionnaireConfiguration)
 		print(dictionnaireConfiguration)
 	return dictionnaireConfiguration
+
