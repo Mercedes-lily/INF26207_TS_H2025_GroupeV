@@ -28,6 +28,7 @@ def connected_loop(serv_socket, conf):
 				return
 		except socket.timeout:
 			pass  # Ignorer les délais d'attente et continuer à écouter
+
 def main():
 	print("L'adresse ipv4 de ce serveur est : 127.0.0.1")
 	conf = Utilitaires.lectureConfigurationFile()
