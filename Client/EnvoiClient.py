@@ -1,6 +1,5 @@
 import random
 
-
 # Fonction qui vérifie si on peut envoyer un paquet
 # Return: True si on peut envoyer, False sinon
 def canSend():

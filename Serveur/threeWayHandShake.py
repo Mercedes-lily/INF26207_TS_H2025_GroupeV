@@ -4,7 +4,7 @@ import EnvoiServeur
 import Header
 import socket
 
-#Négociation des tailles de la taille de la fenêtre et du nombre de morceau avant la confirmation
+#Négociation de la taille de la fenêtre et du nombre de morceau avant l'attente d'une confirmation
 def negociation(message, conf, SYNACK):
 	splitmessage = message.split("\r\n")
 	if(splitmessage[0] != SYNACK):

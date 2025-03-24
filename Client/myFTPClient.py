@@ -6,11 +6,14 @@ import Utilitaires
 import threeWayHandShake
 import socket
 
+#Fonction qui permet au client d'écouter et d'envoyer en continue pendant la durée de sa connection avec le serveur
 def loop_client(client_socket, conf):
 	isconnect = True
 	Commandes.AideCommandes()
 	while(isconnect == True):
 		str = input(":>")
+		if not str:
+			continue
 		strSplit = str.split()
 		if(str.strip() == "ls"):
 			Commandes.commandeLs(client_socket, conf)
@@ -39,38 +42,13 @@ def SocketStart(conf, isconnect, addr):
 		isconnect = threeWayHandShake.ThreeWay(conf, client_socket, serv_adresse)
 	return client_socket
 
-
-def lireEntree(client_socket):
-	str = input("Veuillez entrer une commande:")
-	strSplit = str.split()
-	
-	if(str.strip() == "ls"):
-			print("ls")
-			serv_adresse = ("127.0.0.1", 2212)
-			str += "\r\n"
-			client_socket.sendto(str.encode(), serv_adresse)
-	elif (str.strip() == "bye"):
-		print("bye")
-		serv_adresse = ("127.0.0.1", 2212)
-		str += "\r\n"
-		client_socket.sendto(str.encode(), serv_adresse)
-	elif(len(strSplit) == 2 and  strSplit[0] == "get"):
-		print("get")
-		serv_adresse = ("127.0.0.1", 2212)
-		str = strSplit[0] + "\r\n" + strSplit[1] + "\r\n"
-		client_socket.sendto(str.encode(), serv_adresse)
-	elif(len(strSplit) == 2 and  strSplit[0] == "open"):
-		print("open")
-		serv_adresse = ("127.0.0.1", 2212)
-		str = strSplit[0] + "\r\n" + strSplit[1] + "\r\n"
-		client_socket.sendto(str.encode(), serv_adresse)
-	else:
-		print("Pas la bonne commande")
-
+#Fonction qui permet de démarer le client 
 def OuvertureClient():
 	print("Bienvenue !")
 	while True:
 		str = input("Veuillez entrer open et l'adresse IPv4 du serveur auquel vous voulez vous connecter :>")
+		if not str:
+			continue
 		strSplit = str.split()
 		if(len(strSplit) == 2 and  strSplit[0] == "open"):
 			return strSplit[1]
@@ -81,6 +59,7 @@ def OuvertureClient():
 		else:
 			print("Entrée invalide : Vous devez d'abord vous connecter avec la commande open")
 
+#Fonction de départ 
 def main():
     addr = OuvertureClient()
     isconnect = False

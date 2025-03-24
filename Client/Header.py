@@ -24,8 +24,8 @@ def CreateGetHeader(fichier):
 
 #Fonction pour le header pour l'envoi d'une confirmation
 def CreateConfirmationHeader(last):
-	message += "Confirmation\r\n"
-	message += "DernierMorceaux:" + last + "\r\n"
+	message = "Confirmation\r\n"
+	message += "DernierMorceaux:" + str(last) + "\r\n"
 	message += "TailleHeader:100" + "\r\n"
 	while(len(message) != 100):
 		message += " "

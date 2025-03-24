@@ -16,6 +16,7 @@ def ServeurStart(conf):
 		exit()
 	return serv_socket 
 
+#Fonction qui permet de gérer en continue les demandes du client
 def connected_loop(serv_socket, conf):
 	while True:
 		try:
@@ -31,6 +32,7 @@ def connected_loop(serv_socket, conf):
 		except socket.timeout:
 			pass  # Ignorer les délais d'attente et continuer à écouter
 
+#Fonction de départ 
 def main():
 	print("L'adresse ipv4 de ce serveur est : 127.0.0.1")
 	conf = Utilitaires.lectureConfigurationFile()

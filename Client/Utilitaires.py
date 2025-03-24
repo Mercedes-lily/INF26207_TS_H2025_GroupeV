@@ -26,6 +26,8 @@ def lectureConfigurationFile():
 		print(dictionnaireConfiguration)
 	return dictionnaireConfiguration
 
+#Fonction qui vérifie si on reçoit bien le bon nombre de bytes du serveur 
+# lors de la réception des données liées à la fonction get
 def VerificationChecksum(checksum, donnee):
 	if(len(donnee) == checksum):
 		return True

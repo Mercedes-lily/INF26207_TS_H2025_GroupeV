@@ -25,6 +25,7 @@ def handle_bye_command(client_address, serv_socket):
 	response = Header.CreateByeHeaderServeur()
 	serv_socket.sendto(response.encode(), client_address)
 
+# Fonction qui permet de segmenter en morceau les donnees du fichier à envoyer 
 def segmentation(file, conf):
 	segments = []
 	f = open(FILES_DIRECTORY + "/" + file, "rb")
@@ -37,11 +38,12 @@ def segmentation(file, conf):
 	f.close()
 	return segments
 
+#Fonction qui permet d'écouter en continue du client 
 def sendToClient(file_segmented, client_adresse, serv_socket, conf):
 	j = 0
 	serv_socket.settimeout(3)
 	while True:
-		for i in range(0, int(len(conf["DataConfirmation"])), 1):
+		for i in range(0, int(conf["DataConfirmation"]), 1):
 			if j < len(file_segmented):
 				if EnvoiServeur.canSend():
 					serv_socket.sendto(file_segmented[j], client_adresse)
@@ -52,10 +54,15 @@ def sendToClient(file_segmented, client_adresse, serv_socket, conf):
 		try:
 			data, client_adresse = serv_socket.recvfrom(int(conf["DataSize"]))
 			print(f"Réponse du client {client_adresse}: {data.decode()}")
-			if data.decode() == "RECEIVED":
-				continue
+			print("Reception de la confirmation :")
+			print(data.decode())
+			if data.decode().split("\r\n")[0] == "Confirmation":
+				if j == len(file_segmented):
+					return
+				else:
+					continue
 			else:
-				j -= 4
+				j -= int(conf["DataConfirmation"])
 		except Exception as e:
 			print(f"Erreur de réception: {e}")
 			break
