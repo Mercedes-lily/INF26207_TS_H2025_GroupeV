@@ -5,12 +5,14 @@ Client : Recevoir la commande de l'utilisateur et verifier sa validité (C'est f
 Client : Transformer la demande à envoyé dans le bon format  (C'est fait)
 Serveur : Décrypter la commande et l'éxécuté
     Serveur : Si ls envoyer la liste des fichiers    (C'est fait)
-    Serveur : Si get envoyer le fichier en morceaux en respectant les conditions établis lors de la poignée de main
-    Serveur : Si bye fermé la connection (Mettre dans la boucle)
-Client : si ls afficher les fichiers recus   (Reste à débugger le print)
+    Serveur : Si get envoyer le fichier en morceaux en respectant les conditions établis lors de la poignée de main (A tester)
+    Serveur : Si bye fermé la connection (C'est fait)
+Client : si ls afficher les fichiers recus   (C'est fait)
 Client : Si get Vérifier les données transmise 
 Client : Si bye fermé la connection (C'est fait)
 
+La fonction get est faite, il ne reste qu'a tester les cas où il pourrait arriver des problèmes
+-Fait-
 Mettre les élément dans une boucle d'écoute 
 Faire le get 
 - Envoyer la requete get\r\ntext.txt au serveur
@@ -22,3 +24,4 @@ Faire le get
 -Client : il envoie des confirmation lorsqu'il a recu un certains nombre de morceaux 
         réassemble les morceaux dans le bon ordre
         il le met dans le dossier telechargements
+-Fait-

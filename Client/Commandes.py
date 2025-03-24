@@ -3,6 +3,7 @@ import Header
 import os
 import socket
 
+#Endroit où enregistrer les fichiers téléchargés
 DOWNLOAD_DIR = "Client\Telechargements"
 
 #Fonction qui explique les commandes permises
@@ -13,30 +14,25 @@ def AideCommandes():
 	print("		bye : pour vous reconnecter")
 
 #Fonction qui execute la commande bye 
-def commandeBye(client_socket, conf):    ##comment pour la boucle de renvoie
+def commandeBye(client_socket, conf):
 	str = Header.CreateByeHeader()
 	if EnvoiClient.canSend():
 		client_socket.sendto(str.encode(), conf["AdresseServeur"])
-		data, serv_adresse = client_socket.recvfrom(int(conf["DataSize"]))  #Recoit jusqua datasize byte
+		data, serv_adresse = client_socket.recvfrom(int(conf["DataSize"]))
 		message = data.decode().strip()
 		if(message == "bye\r\n"):
 			print("Déconnection effectué")
 
 
 # Fonction pour recevoir un fichier du serveur
+# Reçoit un fichier du serveur en morceaux et le réassemble.
 def receive_file(client_socket, conf, filename):
-	"""
-	Reçoit un fichier du serveur en morceaux et le réassemble.
-
-    :param filename: Le nom du fichier à télécharger.
-    """
-	client_socket.settimeout(3)
     # Créer le dossier de téléchargement s'il n'existe pas
 	if not os.path.exists(DOWNLOAD_DIR):
 		os.makedirs(DOWNLOAD_DIR)
 
+	#Concatene le dossier avec le fichier è transférer
 	file_path = os.path.join(DOWNLOAD_DIR, filename)
-	print(file_path)
 	received_chunks = {}  # Dictionnaire pour stocker les morceaux reçus
 	expected_chunk_number = 0  # Numéro du morceau attendu
 	BlocConfirmation = int(conf["DataConfirmation"])
@@ -46,21 +42,20 @@ def receive_file(client_socket, conf, filename):
 		try:
             # Recevoir un morceau du serveur
 			data, server_address = client_socket.recvfrom(int(conf["DataSize"]))
-			encodeHeader = data[:100]
-			decodeHeader = encodeHeader.decode()
+			encodeHeader = data[:100] #On sort les données du header qui sont de taille 100
+			decodeHeader = encodeHeader.decode() #C'est données on été encodé en binaire et on doit les decoder avant de les lire
 			decodeHeaderSplit = decodeHeader.split("\r\n")
 			header = {}
 			for i in range(0, 5):
 				dataInfo = decodeHeaderSplit[i].strip().split(":")
 				header[dataInfo[0]] = dataInfo[1]
-			chunk_data = data[100:]
-			print(chunk_data)
+			chunk_data = data[100:] #Ce sont les données brutes du document
 			chunk_number = int(header["NumeroMorceaux"])  # Numéro du morceau
 
             # Stocker le morceau reçu
 			received_chunks[chunk_number] = chunk_data
 
-            # Envoyer un accusé de réception au serveur
+            # Envoyer un accusé de réception au serveur si on arrive au bon nombre de morceau ou à la fin du fichier
 			if((chunk_number % BlocConfirmation == BlocConfirmation - 1) or header["Dernier"] == "True"):
 				ConfirmationHeader = Header.CreateConfirmationHeader(chunk_number)
 				client_socket.sendto(ConfirmationHeader.encode(), server_address)
@@ -68,19 +63,18 @@ def receive_file(client_socket, conf, filename):
 
             # Réassembler les morceaux dans l'ordre
 			if chunk_number == expected_chunk_number:
-				with open(file_path, "ab") as file:
+				with open(file_path, "ab") as file: #TODO append lorsque le fichier existe dejà
 					while expected_chunk_number in received_chunks:
 						file.write(received_chunks[expected_chunk_number])
 						del received_chunks[expected_chunk_number]
 						expected_chunk_number += 1
-				            # Vérifier si c'est la fin du fichier
+			# Vérifier si c'est la fin du fichier
 			if header["Dernier"] == "True":
 				print("Téléchargement terminé.")
 				return
-		except socket.timeout:
+		except socket.timeout: #Attente lorsque le délai est trop long avant de recevoir les données du serveur
 			print("Timeout : Aucun morceau reçu. Attente du prochain...")
 			continue
-	print(f"Fichier enregistré dans {file_path}")
 
 
 #Fonction qui execute la commande get
@@ -95,7 +89,7 @@ def commandeLs(client_socket, conf):
 	str = Header.CreateLsHeader()
 	if EnvoiClient.canSend():
 		client_socket.sendto(str.encode(), conf["AdresseServeur"])
-		data, serv_adresse = client_socket.recvfrom(int(conf["DataSize"]))  #Recoit jusqua datasize byte
+		data, serv_adresse = client_socket.recvfrom(int(conf["DataSize"]))
 		message = data.decode().strip()
 		print("Fichier disponibles : ")
 		print(message) 

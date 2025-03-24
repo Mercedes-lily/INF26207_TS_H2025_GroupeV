@@ -27,7 +27,6 @@ def lectureConfigurationFile():
 				continue
 			dictionnaireConfiguration[splitline[0]] = splitline[1].strip("\n")
 			line = fichier.readline()
-		print(dictionnaireConfiguration)
 		Validite(dictionnaireConfiguration)
 		print(dictionnaireConfiguration)
 	return dictionnaireConfiguration
