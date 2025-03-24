@@ -1,5 +1,6 @@
 # Fonction liés à la reception du serveur
 import Header
+import socket
 import EnvoiClient
 
 def negociation(message, conf):
@@ -26,11 +27,13 @@ def ThreeWay(conf, client_socket, serv_adresse):     ##Prob. ici
 	message = Header.CreateThreeWayHeader("SYN\r\n", conf)
 	if EnvoiClient.canSend():
 		client_socket.sendto(message.encode(), serv_adresse)
-	client_socket.settimeout(3)
+	client_socket.settimeout(10)
 	data, serv_adresse = client_socket.recvfrom(int(conf["DataSize"]))  #Recoit jusqua datasize byte
 	message = data.decode()
 	print(f"Received data from {serv_adresse}: {message}") 
 	if negociation(message, conf) == True:
+		client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, int(conf["DataSize"]) + 3000)
+		client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, int(conf["DataSize"]) + 3000)
 		message = Header.CreateThreeWayHeader("ACK\r\n", conf)
 		if EnvoiClient.canSend():
 			client_socket.sendto(message.encode(), serv_adresse)

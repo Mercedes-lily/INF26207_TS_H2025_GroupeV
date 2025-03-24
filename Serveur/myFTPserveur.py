@@ -23,6 +23,8 @@ def connected_loop(serv_socket, conf):
 			print(f"Received data from {client_adresse}: {data.decode()}")
 			if(data.decode().strip(" \r\n") == "ls"):
 				Commandes.handle_ls_command(client_adresse, serv_socket)
+			if(data.decode().strip(" \r\n").split()[0] == "get"):
+				Commandes.handle_get_command(data, client_adresse, serv_socket, conf)
 			if(data.decode().strip(" \r\n") == "bye"):
 				Commandes.handle_bye_command(client_adresse, serv_socket)
 				return

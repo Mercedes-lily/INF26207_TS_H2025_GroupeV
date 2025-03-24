@@ -39,6 +39,8 @@ def threeWay(conf, serv_socket):
 			if negociation(message, conf, "SYN") == True:
 				print("tried: " + str(tried))
 				print("negociation")
+				serv_socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, int(conf["DataSize"]) + 3000)
+				serv_socket.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, int(conf["DataSize"]) + 3000)
 				serv_socket.settimeout(int(conf	["Timeout"]))  # Mettre à jour le timeout
 				message = Header.CreateThreeWayHeader("SYN-ACK\r\n", conf)
 				tried += 1
