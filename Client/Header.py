@@ -16,7 +16,7 @@ def CreateLsHeader():
 
 #Fonction pour le header de la fonction get
 def CreateGetHeader(fichier):
-	message += "get" + fichier +"\r\n"
+	message = "get" + fichier +"\r\n"
 	message += "TailleHeader:100\r\n"
 	while(len(message) != 100):
 		message += " "

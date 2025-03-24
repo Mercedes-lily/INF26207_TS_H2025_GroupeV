@@ -11,7 +11,7 @@ def loop_client(client_socket, conf):
 	Commandes.AideCommandes()
 	while(isconnect == True):
 		str = input(":>")
-		if(str.empty()):
+		if not str:
 			continue
 		strSplit = str.split()
 		if(str.strip() == "ls"):
