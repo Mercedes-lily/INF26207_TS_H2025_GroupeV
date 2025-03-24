@@ -1,5 +1,4 @@
 #Fonction liés à la poignée de main
-import Commandes
 import EnvoiServeur
 import Header
 import socket
@@ -23,7 +22,7 @@ def negociation(message, conf, SYNACK):
 		conf["DataSize"] = dataRecu["Taille"]
 	if(conf["DataConfirmation"] > dataRecu["NombreMorceaux"]):
 		conf["DataConfirmation"] = dataRecu["NombreMorceaux"]
-	print("nego done")
+	print("Négociation complétée")
 	return True
 
 #Fonction principale du 3-way
