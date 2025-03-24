@@ -32,8 +32,6 @@ def ThreeWay(conf, client_socket, serv_adresse):     ##Prob. ici
 	message = data.decode()
 	print(f"Received data from {serv_adresse}: {message}") 
 	if negociation(message, conf) == True:
-		client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, int(conf["DataSize"]) + 3000)
-		client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, int(conf["DataSize"]) + 3000)
 		message = Header.CreateThreeWayHeader("ACK\r\n", conf)
 		if EnvoiClient.canSend():
 			client_socket.sendto(message.encode(), serv_adresse)

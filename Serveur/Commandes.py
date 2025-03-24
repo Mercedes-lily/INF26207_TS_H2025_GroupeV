@@ -74,6 +74,5 @@ def handle_get_command(data, client_adresse, serv_socket, conf):
 					file_segmented[i] = Header.CreateGetHeaderServeur(file, "False", file_segmented[i], i)
 				else:
 					file_segmented[i] = Header.CreateGetHeaderServeur(file, "True", file_segmented[i], i)
-				print(file_segmented[i])
 			sendToClient(file_segmented, client_adresse, serv_socket, conf)
 	return False #TODO gérer le cas où le fichier n'est pas trouvé
