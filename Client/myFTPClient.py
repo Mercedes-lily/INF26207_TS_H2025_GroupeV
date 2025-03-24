@@ -6,6 +6,7 @@ import Utilitaires
 import threeWayHandShake
 import socket
 
+#Fonction qui permet au client d'écouter et d'envoyer en continue pendant la durée de sa connection avec le serveur
 def loop_client(client_socket, conf):
 	isconnect = True
 	Commandes.AideCommandes()
@@ -41,7 +42,7 @@ def SocketStart(conf, isconnect, addr):
 		isconnect = threeWayHandShake.ThreeWay(conf, client_socket, serv_adresse)
 	return client_socket
 
-
+#Fonction qui permet de démarer le client 
 def OuvertureClient():
 	print("Bienvenue !")
 	while True:
@@ -58,6 +59,7 @@ def OuvertureClient():
 		else:
 			print("Entrée invalide : Vous devez d'abord vous connecter avec la commande open")
 
+#Fonction de départ 
 def main():
     addr = OuvertureClient()
     isconnect = False

@@ -3,6 +3,8 @@ import Header
 import socket
 import EnvoiClient
 
+#Fonction qui permet de négicier la taille de la fenêtre, mais aussi 
+# le nombre de morceaux à envoyer avant la confirmation par le client
 def negociation(message, conf):
 	splitmessage = message.split("\r\n")
 	if(splitmessage[0] != "SYN-ACK"):
@@ -23,6 +25,7 @@ def negociation(message, conf):
 		conf["DataConfirmation"] = dataRecu["NombreMorceaux"]
 	return True
 
+#Fonction qui gère la poignée de main 
 def ThreeWay(conf, client_socket, serv_adresse):     ##Prob. ici
 	message = Header.CreateThreeWayHeader("SYN\r\n", conf)
 	if EnvoiClient.canSend():
