@@ -29,7 +29,7 @@ def segmentation(file, conf):
 	segments = []
 	f = open(FILES_DIRECTORY + "/" + file, "rb")
 	while True:
-		seg = f.read(int(conf["DataSize"]))
+		seg = f.read(int(conf["DataSize"]) - 100)  # -100 pour le header
 		if seg:
 			segments.append(seg)
 		else:

@@ -6,14 +6,6 @@ import Utilitaires
 import threeWayHandShake
 import socket
 
-def receiveFile(client_socket, conf):
-	i = 0
-	while i < 10:
-		data, serv_adresse = client_socket.recvfrom(int(conf["DataSize"]))
-		message = data.decode()
-		print("Message reçu : " + message)
-		i+=1
-
 def loop_client(client_socket, conf):
 	isconnect = True
 	Commandes.AideCommandes()
@@ -31,7 +23,6 @@ def loop_client(client_socket, conf):
 			print("Veuillez entrer la commande bye uniquement")
 		elif(strSplit[0].strip() == "get"and len(strSplit) == 2):
 			Commandes.commandeGet(client_socket, conf, strSplit[1])
-			receiveFile(client_socket, conf)
 		elif(strSplit[0].strip() == "get"and len(strSplit) != 2):
 			print("La commande get doit  être écrite comme suit : get NomDuFichier.Extention")
 		elif(strSplit[0].strip() == "open"):
