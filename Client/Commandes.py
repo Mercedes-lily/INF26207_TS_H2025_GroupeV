@@ -3,7 +3,7 @@ import Header
 import os
 import socket
 
-DOWNLOAD_DIR = "telechargements"
+DOWNLOAD_DIR = "Client\Telechargements"
 
 def AideCommandes():
 	print("Veuillez entrer une commande parmi :")
@@ -133,11 +133,13 @@ def receive_file(client_socket, conf, filename):
 
     :param filename: Le nom du fichier à télécharger.
     """
+	client_socket.settimeout(3)
     # Créer le dossier de téléchargement s'il n'existe pas
 	if not os.path.exists(DOWNLOAD_DIR):
 		os.makedirs(DOWNLOAD_DIR)
 
 	file_path = os.path.join(DOWNLOAD_DIR, filename)
+	print(file_path)
 	received_chunks = {}  # Dictionnaire pour stocker les morceaux reçus
 	expected_chunk_number = 0  # Numéro du morceau attendu
 	BlocConfirmation = int(conf["DataConfirmation"])
@@ -147,35 +149,37 @@ def receive_file(client_socket, conf, filename):
 		try:
             # Recevoir un morceau du serveur
 			data, server_address = client_socket.recvfrom(int(conf["DataSize"]))
-			dataSplit = data.strip().split("\r\n")
+			encodeHeader = data[:100]
+			decodeHeader = encodeHeader.decode()
+			decodeHeaderSplit = decodeHeader.split("\r\n")
 			header = {}
 			for i in range(0, 5):
-				dataInfo = dataSplit[i].split(":")
+				dataInfo = decodeHeaderSplit[i].strip().split(":")
 				header[dataInfo[0]] = dataInfo[1]
-			chunk_data = dataSplit[5]
-			chunk_number = int(dataInfo["NumeroMorceaux"])  # Numéro du morceau
-
-            # Vérifier si c'est la fin du fichier
-			if dataInfo["NumeroMorceaux"] == "True":
-				print("Téléchargement terminé.")
-				break
+			chunk_data = data[100:]
+			print(chunk_data)
+			chunk_number = int(header["NumeroMorceaux"])  # Numéro du morceau
 
             # Stocker le morceau reçu
 			received_chunks[chunk_number] = chunk_data
 
             # Envoyer un accusé de réception au serveur
-			if(chunk_number % BlocConfirmation == BlocConfirmation - 1):
+			if((chunk_number % BlocConfirmation == BlocConfirmation - 1) or header["Dernier"] == "True"):
 				ConfirmationHeader = Header.CreateConfirmationHeader(chunk_number)
-			client_socket.sendto(ConfirmationHeader.encode(), server_address)
-			print(f"Accusé de réception envoyé pour le morceau {chunk_number}")
+				client_socket.sendto(ConfirmationHeader.encode(), server_address)
+				print(f"Accusé de réception envoyé pour le morceau {chunk_number}")
 
             # Réassembler les morceaux dans l'ordre
 			if chunk_number == expected_chunk_number:
-				with open(file_path, "ab") as file:  # Mode "append binary"
+				with open(file_path, "ab") as file:
 					while expected_chunk_number in received_chunks:
 						file.write(received_chunks[expected_chunk_number])
 						del received_chunks[expected_chunk_number]
 						expected_chunk_number += 1
+				            # Vérifier si c'est la fin du fichier
+			if header["Dernier"] == "True":
+				print("Téléchargement terminé.")
+				return
 		except socket.timeout:
 			print("Timeout : Aucun morceau reçu. Attente du prochain...")
 			continue
