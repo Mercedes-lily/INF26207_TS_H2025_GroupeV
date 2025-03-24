@@ -25,6 +25,7 @@ def handle_bye_command(client_address, serv_socket):
 	response = Header.CreateByeHeaderServeur()
 	serv_socket.sendto(response.encode(), client_address)
 
+# Fonction qui permet de segmenter en morceau les donnees du fichier à envoyer 
 def segmentation(file, conf):
 	segments = []
 	f = open(FILES_DIRECTORY + "/" + file, "rb")
@@ -37,6 +38,7 @@ def segmentation(file, conf):
 	f.close()
 	return segments
 
+#Fonction qui permet d'écouter en continue du client 
 def sendToClient(file_segmented, client_adresse, serv_socket, conf):
 	j = 0
 	serv_socket.settimeout(3)
