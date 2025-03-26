@@ -23,11 +23,11 @@ def connected_loop(serv_socket, conf):
 			data, client_adresse = serv_socket.recvfrom(int(conf["DataSize"]))  # Recoit jusqua DataSize bytes
 			print(f"Received data from {client_adresse}: {data.decode()}")
 			if(data.decode().strip(" \r\n") == "ls"):
-				Commandes.handle_ls_command(client_adresse, serv_socket)
+				Commandes.handle_ls_command(client_adresse, serv_socket, conf)
 			if(data.decode().strip(" \r\n").split()[0] == "get"):
 				Commandes.handle_get_command(data, client_adresse, serv_socket, conf)
 			if(data.decode().strip(" \r\n") == "bye"):
-				Commandes.handle_bye_command(client_adresse, serv_socket)
+				Commandes.handle_bye_command(client_adresse, serv_socket, conf)
 				return
 		except socket.timeout:
 			pass  # Ignorer les délais d'attente et continuer à écouter

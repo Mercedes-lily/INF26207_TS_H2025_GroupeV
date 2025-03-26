@@ -40,7 +40,7 @@ def SocketStart(conf, isconnect, addr):
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	while (isconnect == False):
 		isconnect = threeWayHandShake.ThreeWay(conf, client_socket, serv_adresse)
-	return client_socket
+	return client_socket #TODO est-ce qu'il faut bind le socket client à une adresse ip et un port???
 
 #Fonction qui permet de démarer le client 
 def OuvertureClient():

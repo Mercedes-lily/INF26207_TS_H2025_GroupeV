@@ -41,7 +41,7 @@ def threeWay(conf, serv_socket):
 				serv_socket.settimeout(int(conf	["Timeout"]))  # Mettre à jour le timeout
 				message = Header.CreateThreeWayHeader("SYN-ACK\r\n", conf)
 				tried += 1
-				if EnvoiServeur.canSend():
+				if EnvoiServeur.canSend(float(conf["Fiabilite"])):
 					serv_socket.sendto(message.encode(), client_adresse)
 				else:
 					print("Erreur envoie")

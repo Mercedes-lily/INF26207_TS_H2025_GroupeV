@@ -14,16 +14,18 @@ def list_files():
 	return files
 
 # Fonction pour gérer la commande "ls"
-def handle_ls_command(client_address, serv_socket):
+def handle_ls_command(client_address, serv_socket, conf):
 	files = list_files()
 	response = Header.CreateLsHeaderServeur(files)
-	serv_socket.sendto(response.encode(), client_address)
-	print(f"Liste des fichiers envoyée au client {client_address} \n" + response)
+	if EnvoiServeur.canSend(float(conf["Fiabilite"])):
+		serv_socket.sendto(response.encode(), client_address)
+		print(f"Liste des fichiers envoyée au client {client_address} \n" + response)
 
 # Fonction pour gérer la commande "bye" - Déconnexion
-def handle_bye_command(client_address, serv_socket):
+def handle_bye_command(client_address, serv_socket, conf):
 	response = Header.CreateByeHeaderServeur()
-	serv_socket.sendto(response.encode(), client_address)
+	if EnvoiServeur.canSend(float(conf["Fiabilite"])):
+		serv_socket.sendto(response.encode(), client_address)
 
 # Fonction qui permet de segmenter en morceau les donnees du fichier à envoyer 
 def segmentation(file, conf):
@@ -38,14 +40,14 @@ def segmentation(file, conf):
 	f.close()
 	return segments
 
-#Fonction qui permet d'écouter en continue du client 
+#Fonction qui permet d'envoyer les segments de fichier au client et d'attendre la confirmation
 def sendToClient(file_segmented, client_adresse, serv_socket, conf):
 	j = 0
 	serv_socket.settimeout(3)
 	while True:
 		for i in range(0, int(conf["DataConfirmation"]), 1):
 			if j < len(file_segmented):
-				if EnvoiServeur.canSend():
+				if EnvoiServeur.canSend(float(conf["Fiabilite"])):
 					serv_socket.sendto(file_segmented[j], client_adresse)
 					print(f"Envoi du segment {j} au client {client_adresse}")
 				j+= 1

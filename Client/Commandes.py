@@ -16,7 +16,7 @@ def AideCommandes():
 #Fonction qui execute la commande bye 
 def commandeBye(client_socket, conf):
 	str = Header.CreateByeHeader()
-	if EnvoiClient.canSend():
+	if EnvoiClient.canSend(float(conf["Fiabilite"])):
 		client_socket.sendto(str.encode(), conf["AdresseServeur"])
 		data, serv_adresse = client_socket.recvfrom(int(conf["DataSize"]))
 		message = data.decode().strip()
@@ -58,12 +58,19 @@ def receive_file(client_socket, conf, filename):
             # Envoyer un accusé de réception au serveur si on arrive au bon nombre de morceau ou à la fin du fichier
 			if((chunk_number % BlocConfirmation == BlocConfirmation - 1) or header["Dernier"] == "True"):
 				ConfirmationHeader = Header.CreateConfirmationHeader(chunk_number)
-				client_socket.sendto(ConfirmationHeader.encode(), server_address)
-				print(f"Accusé de réception envoyé pour le morceau {chunk_number}")
+				if EnvoiClient.canSend(float(conf["Fiabilite"])):
+					client_socket.sendto(ConfirmationHeader.encode(), server_address)
+					print(f"Accusé de réception envoyé pour le morceau {chunk_number}")
 
-            # Réassembler les morceaux dans l'ordre
+            # Réassembler les morceaux dans l'ordre. Si c'est le premier morceau et qu'il y a un fichier du même nom, le remplacer
 			if chunk_number == expected_chunk_number:
-				with open(file_path, "ab") as file: #TODO append lorsque le fichier existe dejà
+				if chunk_number == 0:
+					with open(file_path, "wb") as file:
+						file.write(received_chunks[expected_chunk_number])
+						file.close()
+						del received_chunks[expected_chunk_number]
+						expected_chunk_number += 1
+				with open(file_path, "ab") as file: 
 					while expected_chunk_number in received_chunks:
 						file.write(received_chunks[expected_chunk_number])
 						del received_chunks[expected_chunk_number]
@@ -80,14 +87,14 @@ def receive_file(client_socket, conf, filename):
 #Fonction qui execute la commande get
 def commandeGet(client_socket, conf, fichier):
 	str = Header.CreateGetHeader(fichier)
-	if EnvoiClient.canSend():
+	if EnvoiClient.canSend(float(conf["Fiabilite"])):
 		client_socket.sendto(str.encode(), conf["AdresseServeur"])
 		receive_file(client_socket, conf, fichier)
 		
 #Fonction qui execute la fonction ls
 def commandeLs(client_socket, conf):
 	str = Header.CreateLsHeader()
-	if EnvoiClient.canSend():
+	if EnvoiClient.canSend(float(conf["Fiabilite"])):
 		client_socket.sendto(str.encode(), conf["AdresseServeur"])
 		data, serv_adresse = client_socket.recvfrom(int(conf["DataSize"]))
 		message = data.decode().strip()

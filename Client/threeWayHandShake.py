@@ -1,6 +1,5 @@
 # Fonction liés à la reception du serveur
 import Header
-import socket
 import EnvoiClient
 
 #Fonction qui permet de négicier la taille de la fenêtre, mais aussi 
@@ -28,15 +27,15 @@ def negociation(message, conf):
 #Fonction qui gère la poignée de main 
 def ThreeWay(conf, client_socket, serv_adresse):     ##Prob. ici
 	message = Header.CreateThreeWayHeader("SYN\r\n", conf)
-	if EnvoiClient.canSend():
+	if EnvoiClient.canSend(float(conf["Fiabilite"])):
 		client_socket.sendto(message.encode(), serv_adresse)
-	client_socket.settimeout(10)
+	client_socket.settimeout(3) #TODO check time outs.... it should be 3 when sending data, 0.1 when waiting for something to happen (server side only)
 	data, serv_adresse = client_socket.recvfrom(int(conf["DataSize"]))  #Recoit jusqua datasize byte
 	message = data.decode()
 	print(f"Received data from {serv_adresse}: {message}") 
 	if negociation(message, conf) == True:
 		message = Header.CreateThreeWayHeader("ACK\r\n", conf)
-		if EnvoiClient.canSend():
+		if EnvoiClient.canSend(float(conf["Fiabilite"])):
 			client_socket.sendto(message.encode(), serv_adresse)
 			return True
 		else:
