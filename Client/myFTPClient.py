@@ -38,9 +38,11 @@ def SocketStart(conf, isconnect, addr):
 	serv_adresse = (addr, 2212)  #changer pour celui que on va recevoir de lentree du client
 	conf["AdresseServeur"] = serv_adresse
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	client_socket.settimeout(int(conf["Timeout"]))
 	while (isconnect == False):
 		isconnect = threeWayHandShake.ThreeWay(conf, client_socket, serv_adresse)
-	return client_socket #TODO est-ce qu'il faut bind le socket client à une adresse ip et un port???
+	client_socket.settimeout(0.1)
+	return client_socket
 
 #Fonction qui permet de démarer le client 
 def OuvertureClient():
@@ -59,16 +61,18 @@ def OuvertureClient():
 		else:
 			print("Entrée invalide : Vous devez d'abord vous connecter avec la commande open")
 
-#Fonction de départ 
+#Fonction de départ
 def main():
-    addr = OuvertureClient()
-    isconnect = False
-    conf = Utilitaires.lectureConfigurationFile()
-    client_socket = SocketStart(conf, isconnect, addr)
-    loop_client(client_socket, conf)
+	try:
+		addr = OuvertureClient()
+		isconnect = False
+		conf = Utilitaires.lectureConfigurationFile()
+		client_socket = SocketStart(conf, isconnect, addr)
+		loop_client(client_socket, conf)
+	except KeyboardInterrupt:
+		print("Interruption du client par l'utilisateur (Ctrl+C)")
 
 if __name__ == "__main__":
 	main()
-
 
 # ls  --->    ls\r\n    get test.txt---->    get\r\ntest.txt\r\n

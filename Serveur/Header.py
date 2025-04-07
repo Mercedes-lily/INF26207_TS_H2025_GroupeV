@@ -21,9 +21,23 @@ def CreateGetHeaderServeur(fichier, islast, donnee, numero):
 	message = message.encode() + donnee
 	return message
 
-#Fonction pour le header de la fonction by
+#Fonction pour le header de la fonction bye
 def CreateByeHeaderServeur():
 	message = "bye\r\n"
+	while(len(message) != 100):
+		message += " "
+	return message
+
+#Fonction pour le header pour l'échec de la transmission du fichier
+def CreateEchecHeaderServeur():
+	message = "Échec\r\n"
+	while(len(message) != 100):
+		message += " "
+	return message
+
+#Fonction pour le header d'un fichier inconnu
+def FileNotFoundHeaderServeur():
+	message = "Le fichier n'existe pas\r\n"
 	while(len(message) != 100):
 		message += " "
 	return message
