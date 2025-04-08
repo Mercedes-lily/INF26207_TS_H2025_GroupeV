@@ -26,14 +26,20 @@ def negociation(message, conf, SYNACK):
 	return True
 
 #Fonction principale du 3-way
-def threeWay(conf, serv_socket):
+def threeWay(conf, serv_socket, reponse, adresse):
 	tried = 0
 	while True:
 		try:
-			data, client_adresse = serv_socket.recvfrom(int(conf["DataSize"]))  # Recoit jusqua DataSize bytes
+			if reponse == None:
+				adresse = None
+				data, client_adresse = serv_socket.recvfrom(int(conf["DataSize"]))  # Recoit jusqua DataSize bytes
+			else:
+				data = reponse
+				client_adresse = adresse
 			if not data or tried > 4:
-				break  #TODO Connexion fermée par l'hôte distant ############UTILE? 
+				break 
 			message = data.decode()
+			print("1")
 			print(f"Received data from {client_adresse}: {message}")
 			if negociation(message, conf, "SYN") == True:
 				print("tried: " + str(tried))

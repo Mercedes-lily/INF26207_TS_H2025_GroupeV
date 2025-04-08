@@ -26,6 +26,3 @@ Faire le get
         il le met dans le dossier telechargements
 -Fait-
 
-#TODO check md5 pour validation du fichier par hachage (ou sha 256)
-#TODO vérifier le checksum soit constant sur tout le temps de transmission
-#TODO mettre une adresse au client? voir exemple socket
